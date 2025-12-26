@@ -1,7 +1,42 @@
 library(dplyr)
-library(friends.test)
 library(tictoc)
 library(purrr)
+
+#code that check whether the version of friends.test is 0.99.17; 
+#if not, unload the package, remove it if exists and 
+#install from github favorov/friends.test at ralease 0.99.17
+
+target_version <- "0.99.17"
+current_version <- tryCatch(
+    as.character(utils::packageVersion("friends.test")),
+    error = function(e) NA_character_
+)
+if (is.na(current_version) || current_version != target_version) {
+    if ("package:friends.test" %in% search()) {
+        try(
+            detach(
+                "package:friends.test",
+                unload = TRUE,
+                character.only = TRUE
+            ),
+            silent = TRUE
+        )
+    }
+    ip <- rownames(installed.packages())
+    if (!("remotes" %in% ip)) {
+        install.packages("remotes")
+    }
+    if ("friends.test" %in% ip) {
+        try(remove.packages("friends.test"), silent = TRUE)
+    }
+    remotes::install_github(
+        "favorov/friends.test",
+        ref = target_version,
+        upgrade = "never"
+    )
+}
+
+library(friends.test)
 
 
 expression_filename <- "data/GSE112026/GSE112026_HPVOP_RSEMNorm.txt"
