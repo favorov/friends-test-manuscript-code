@@ -1,5 +1,4 @@
 library(dplyr)
-library(friends.test)
 library(tictoc)
 library(purrr)
 library(parallel)
@@ -134,5 +133,5 @@ if (!file.exists(null_distribution_file)) {
         null_distribution_file
     )
 } else {
-    cat(paste0("The file ", null_distribution_file, " already exists"))
+    cat(paste0("The file ", null_distribution_file, " already exists\n"))
 }
